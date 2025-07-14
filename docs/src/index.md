@@ -1,0 +1,83 @@
+```@meta
+CurrentModule = PortHamiltonianSystems
+```
+
+# PortHamiltonianSystems
+
+Documentation for [PortHamiltonianSystems](https://github.com/Jonas-Nicodemus/PortHamiltonianSystems.jl).
+
+A package for port-Hamiltonian Systems in Julia.
+
+The considered systems are of the form
+
+```math
+    \Sigma\quad\left\{\quad\begin{aligned}
+        \dot{x}(t) &= (J - R)Qx(t) + (G - P)u(t), \\
+        y(t) &= (G + P)^\top Qx(t) + (S - N)u(t)
+    \end{aligned}\right.,
+```
+where $J=-J^\top\in \mathbb{R}^{n\times n}$ is skew-symmetric, $R\in \mathbb{R}^{n\times n}$ is positive semi-definite, $Q\in \mathbb{R}^{n\times n}$ is positive definite, $G\in \mathbb{R}^{n\times m}$, $P\in \mathbb{R}^{n\times m}$, $S\in \mathbb{R}^{m\times m}$ and $N\in \mathbb{R}^{m\times m}$.
+
+### Example
+
+```julia
+using LinearAlgebra, ControlSystemsBase
+using PortHamiltonianSystems
+
+J = [0 -1; 1 0]
+R = [1 -1; -1 2]
+Q = I(2)
+G = [1; 0;;]
+
+Σph = phss(J, R, Q, G)
+# This generates the system:
+# PortHamiltonianStateSpace{Float64}
+# J = 
+#   0.0  -1.0
+#  1.0  0.0
+# R = 
+#   1.0  -1.0
+#  -1.0   2.0
+# Q = 
+#  1.0  0.0
+#  0.0  1.0
+# G = 
+#  1.0
+#  0.0
+# P = 
+#  0.0
+#  0.0
+# S = 
+#  0.0
+# N = 
+#  0.0
+
+# Compute the observability Gramian
+gram(Σph, :o)
+# 2×2 Matrix{Float64}:
+#  0.5  0.0
+#  0.0  0.0
+
+# Compute a numerically minimal realization
+Σphr = phminreal(Σph)
+
+# Compute H2 and Hinf errors
+norm(Σph - Σphr) # 9.56908750203461e-17
+norm(Σph - Σphr, Inf) # 1.8182097724708874e-16
+
+# Computes unstructured state-space realization
+Σ = ss(Σph)
+
+# Checking passivity
+ispassive(Σ) # true
+
+# Computes pH realization for a given posdef X satisfying the KYP inequality 
+X = kyp(Σ)
+Σph2 = phss(Σ, X)
+
+norm(Σph - Σph2) # 1.3470909371896273e-16
+```
+
+## References
+```@bibliography
+```
