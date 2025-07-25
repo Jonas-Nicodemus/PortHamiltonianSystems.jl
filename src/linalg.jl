@@ -80,7 +80,8 @@ end
 
 """
     F = tsvd(A; kwargs...)
-    Returns the truncated singular value decomposition of `A` by truncating small singular values below `ε`.
+
+Returns the truncated singular value decomposition of `A` by truncating small singular values below `ε`.
 """
 function tsvd(A::AbstractMatrix; ε=1e-12, kwargs...)
     return tsvd(svd(A; kwargs...); ε=ε)
