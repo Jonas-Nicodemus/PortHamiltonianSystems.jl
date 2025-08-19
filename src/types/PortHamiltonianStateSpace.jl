@@ -78,6 +78,11 @@ function phss(Γ::AbstractMatrix, W::AbstractMatrix, Q::AbstractMatrix)
     return phss(J, R, Q, G, P, S, N)
 end
 
+# Functions for number of inputs, outputs and states
+ninputs(sys::PortHamiltonianStateSpace) = size(sys.G, 2)
+noutputs(sys::PortHamiltonianStateSpace) = size(sys.G, 2)
+nstates(sys::PortHamiltonianStateSpace) = size(sys.G, 1)
+
 """
     Γ(Σ) 
 
@@ -94,6 +99,22 @@ Returns the dissipation matrix of the pH system.
 """
 function W(Σ::PortHamiltonianStateSpace)
     return [Σ.R Σ.P; Σ.P' Σ.S]
+end
+
+function Base.getproperty(Σ::PortHamiltonianStateSpace, s::Symbol)
+    if s === :nx
+        return nstates(Σ)
+    elseif s === :nu
+        return ninputs(Σ)
+    elseif s === :ny
+        return noutputs(Σ)
+    elseif s === :Γ
+        return Γ(Σ)
+    elseif s === :W
+        return W(Σ)
+    else
+        return getfield(Σ, s)
+    end
 end
 
 function -(sys1::PortHamiltonianStateSpace, sys2::PortHamiltonianStateSpace)

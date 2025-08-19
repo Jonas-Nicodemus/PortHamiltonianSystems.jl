@@ -34,4 +34,15 @@ using PortHamiltonianSystems
         @test norm(Γ - PortHamiltonianSystems.Γ(Σ)) < 1e-12
         @test norm(W - PortHamiltonianSystems.W(Σ)) < 1e-12
     end
+
+    @testset "getproperty" begin
+        Σ = phss(J, R, Q, G, P, S, N)
+
+        @test Σ.nx == size(G, 1)
+        @test Σ.nu == size(G, 2)
+        @test Σ.ny == size(G, 2)
+
+        @test Σ.Γ == Γ
+        @test Σ.W == W
+    end
 end
