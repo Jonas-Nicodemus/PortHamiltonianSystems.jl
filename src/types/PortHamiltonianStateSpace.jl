@@ -55,11 +55,18 @@ with matrix element type `T`.
 """
 phss(args...;kwargs...) = PortHamiltonianStateSpace(args...;kwargs...)
 
-function phss(J, R, Q, G)
+function phss(J::AbstractNumOrArray, R::AbstractNumOrArray, Q::AbstractNumOrArray, G::AbstractNumOrArray)
     return phss(J, R, Q, G, zeros(size(G,1), size(G,2)), zeros(size(G,2), size(G,2)), zeros(size(G,2), size(G,2)))
 end
 
-function phss(Γ, W, Q)
+function phss(Γ::AbstractMatrix, W::AbstractMatrix, m::Int)
+    n = size(Γ,1) - m
+    Q = I(n)
+    
+    return phss(Γ, W, Q)
+end
+
+function phss(Γ::AbstractMatrix, W::AbstractMatrix, Q::AbstractMatrix)
     n = size(Q,1)
     J = Γ[1:n, 1:n]
     G = Γ[1:n, n+1:end]
@@ -69,6 +76,24 @@ function phss(Γ, W, Q)
     P = W[1:n, n+1:end]
     S = W[n+1:end, n+1:end]
     return phss(J, R, Q, G, P, S, N)
+end
+
+"""
+    Γ(Σ) 
+
+Returns the structure matrix of the pH system.
+"""
+function Γ(Σ::PortHamiltonianStateSpace)
+    return [Σ.J Σ.G; -Σ.G' Σ.N]
+end
+
+"""
+    W(Σ)
+
+Returns the dissipation matrix of the pH system.
+"""
+function W(Σ::PortHamiltonianStateSpace)
+    return [Σ.R Σ.P; Σ.P' Σ.S]
 end
 
 function -(sys1::PortHamiltonianStateSpace, sys2::PortHamiltonianStateSpace)
