@@ -24,25 +24,26 @@ See the function [`phss`](@ref) for a user facing constructor.
 """
 struct PortHamiltonianStateSpace{T}
     J::SkewHermitian{T}
-    R::Hermitian{T}
-    Q::Hermitian{T}
+    R::Symmetric{T}
+    Q::Symmetric{T}
     G::Matrix{T}
     P::Matrix{T}
-    S::Hermitian{T}
+    S::Symmetric{T}
     N::SkewHermitian{T}
 end
 
 function PortHamiltonianStateSpace(J::AbstractNumOrArray, R::AbstractNumOrArray, Q::AbstractNumOrArray, 
     G::AbstractNumOrArray, P::AbstractNumOrArray, S::AbstractNumOrArray, N::AbstractNumOrArray)
     T = promote_type(eltype(J), eltype(R), eltype(Q), eltype(G), eltype(P), eltype(S), eltype(N))
+
     return PortHamiltonianStateSpace{T}(
-        skewhermitian(to_matrix(T, J)), 
-        hermitianpart(to_matrix(T, R)), 
-        hermitianpart(to_matrix(T, Q)), 
+        SkewHermitian(to_matrix(T, J)), 
+        Symmetric(to_matrix(T, R)), 
+        Symmetric(to_matrix(T, Q)), 
         to_matrix(T, G), 
         to_matrix(T, P), 
-        hermitianpart(to_matrix(T, S)), 
-        skewhermitian(to_matrix(T, N)))
+        Symmetric(to_matrix(T, S)), 
+        SkewHermitian(to_matrix(T, N)))
 end
 
 """
@@ -89,7 +90,7 @@ nstates(sys::PortHamiltonianStateSpace) = size(sys.G, 1)
 Returns the structure matrix of the pH system.
 """
 function Γ(Σ::PortHamiltonianStateSpace)
-    return [Σ.J Σ.G; -Σ.G' Σ.N]
+    return SkewHermitian([Σ.J Σ.G; -Σ.G' Σ.N])
 end
 
 """
@@ -98,7 +99,7 @@ end
 Returns the dissipation matrix of the pH system.
 """
 function W(Σ::PortHamiltonianStateSpace)
-    return [Σ.R Σ.P; Σ.P' Σ.S]
+    return Symmetric([Σ.R Σ.P; Σ.P' Σ.S])
 end
 
 function Base.getproperty(Σ::PortHamiltonianStateSpace, s::Symbol)
