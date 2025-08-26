@@ -15,11 +15,11 @@ See the function [`phss`](@ref) for a user facing constructor.
 
 # Fields:
 - `J::SkewHermitian{T}`
-- `R::Hermitian{T}`
-- `Q::Hermitian{T}`
+- `R::Symmetric{T}`
+- `Q::Symmetric{T}`
 - `G::Matrix{T}`
 - `P::Matrix{T}`
-- `S::Hermitian{T}`
+- `S::Symmetric{T}`
 - `N::SkewHermitian{T}`
 """
 struct PortHamiltonianStateSpace{T}
@@ -52,19 +52,23 @@ end
     Σph = phss(Γ, W, Q)  
 
 Creates a port-Hamiltonian state-space model `Σph::PortHamiltonianStateSpace{T}`
-with matrix element type `T`.
+with matrix element type `T`. 
+Note that `J`, `N` must be skew-symmetric and `R`, `Q`, `S` must be symmetric.
+When using the structure and dissipation matrices `Γ` and `W`, they must also satisfy these properties,
+i.e., `Γ` must be skew-symmetric and `W` must be symmetric.
+
 """
 phss(args...;kwargs...) = PortHamiltonianStateSpace(args...;kwargs...)
 
 function phss(J::AbstractNumOrArray, R::AbstractNumOrArray, Q::AbstractNumOrArray, G::AbstractNumOrArray)
-    return phss(J, R, Q, G, zeros(size(G,1), size(G,2)), zeros(size(G,2), size(G,2)), zeros(size(G,2), size(G,2)))
+    T = promote_type(eltype(J), eltype(R), eltype(Q), eltype(G))
+    return phss(J, R, Q, G, zeros(T, size(G,1), size(G,2)), zeros(T, size(G,2), size(G,2)), zeros(T, size(G,2), size(G,2)))
 end
 
 function phss(Γ::AbstractMatrix, W::AbstractMatrix, m::Int)
     n = size(Γ,1) - m
-    Q = I(n)
     
-    return phss(Γ, W, Q)
+    return phss(Γ, W, I(n))
 end
 
 function phss(Γ::AbstractMatrix, W::AbstractMatrix, Q::AbstractMatrix)

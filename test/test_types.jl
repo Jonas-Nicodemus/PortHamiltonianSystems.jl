@@ -4,12 +4,12 @@ using LinearAlgebra
 using PortHamiltonianSystems
 
 @testset "PortHamiltonianStateSpace" begin
-    J = [0. 1.; -1. 0.]
-    R = [2. 0.; 0. 1.]
-    Q = [1. 0.; 0. 1.]
-    G = [6.; 0.;;]
+    J = [0 1; -1 0]
+    R = [2 0; 0 1]
+    Q = [1 0; 0 1]
+    G = [6; 0;]
     P = zero(G)
-    S = [1.;;]
+    S = 1
     N = zero(S)
 
     Γ = [J G; -G' N]
@@ -21,12 +21,8 @@ using PortHamiltonianSystems
         Σ3 = phss(Γ, W, Q)
         @test norm(Σ1 - Σ3) < 1e-12
 
-
-        S = 1
-        Σ4 = phss(J, R, Q, G, P, S, N)
-
-        Σ5 = phss(Γ, W, 1)
-        @test norm(Σ3 - Σ5) < 1e-12
+        Σ4 = phss(Γ, W, 1)
+        @test norm(Σ3 - Σ4) < 1e-12
     end
 
     @testset "Γ & W" begin
