@@ -79,9 +79,11 @@ function unvec(v::AbstractMatrix)
 end
 
 """
-    F = tsvd(A; kwargs...)
+    F = tsvd(A; ε=1e-12, kwargs...)
+    F = tsvd(A, r; kwargs...)
 
-Returns the truncated singular value decomposition of `A` by truncating small singular values below `ε`.
+Returns the truncated singular value decomposition of `A` by truncating small singular values below `ε`
+or by retaining only the top `r` singular values.
 """
 function tsvd(A::AbstractMatrix; ε=1e-12, kwargs...)
     return tsvd(svd(A; kwargs...); ε=ε)
