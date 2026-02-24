@@ -7,7 +7,7 @@ using JuMP, Hypatia
 export PortHamiltonianStateSpace, phss # types/PortHamiltonianStateSpace.jl
 export ispassive, sampopov # analysis.jl
 export grampd, gram, prgrampd, prgram # gramians.jl
-export kyp, kypare, kypmat, kypmin, kypmax # kyp.jl
+export kyp, kypare, kypmat, kypmin, kypmax, kypgap # kyp.jl
 export compose, decompose # convert.jl
 export popov # freqresp.jl
 export project_psd, ispsd, lrcholesky, tsvd # linalg.jl

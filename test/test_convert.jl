@@ -7,7 +7,6 @@ using PortHamiltonianSystems
 using ControlSystemsBase
 
 @testset "test_convert.jl" begin
-
     J = [0. 1.; -1. 0.]
     R = [2. 0.; 0. 1.]
     Q = [1. 0.; 0. 1.]

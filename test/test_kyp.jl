@@ -25,6 +25,9 @@ using LinearAlgebra, ControlSystemsBase
 
             Xmax = kypmax(Σᵢ)
             @test norm(kypare(Σ, Xmax)) < 1e-8
+
+            Δ = kypgap(Σᵢ)
+            @test norm(Δ - (Xmax - Xmin)) < 1e-8
         end
     end
 

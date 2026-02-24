@@ -59,17 +59,15 @@ Decomposes the standard state-space matrices to port-Hamiltonian matrices for a 
 according to
 
     Q = X
-    J = skew(A / X)
-    R = -sym(A / X)
-    G = 0.5 * (X \\ C' + B)
-    P = 0.5 * (X \\ C' - B)
-    S = sym(D)
-    N = skew(D).
-"""
-function decompose(A::Matrix, B::Matrix, C::Matrix, D::Matrix, X::Hermitian)
     J = skewhermitian(A / X)
     R = -hermitianpart(A / X)
-    Q = X
+    G = 0.5 * (X \\ C' + B)
+    P = 0.5 * (X \\ C' - B)
+    S = hermitianpart(D)
+    N = skewhermitian(D).
+"""
+function decompose(A::Matrix, B::Matrix, C::Matrix, D::Matrix, X::Hermitian)
+    J, R, Q = decompose(A, X)
     G = 0.5 * (X \ C' + B)
     P = 0.5 * (X \ C' - B)
     S = hermitianpart(D)
@@ -78,4 +76,11 @@ function decompose(A::Matrix, B::Matrix, C::Matrix, D::Matrix, X::Hermitian)
 end
 function decompose(A::Matrix, B::Matrix, C::Matrix, D::Matrix, X::Matrix)
     return decompose(A, B, C, D, hermitianpart(X))
+end
+
+function decompose(A::Matrix, X::Hermitian)
+    J = skewhermitian(A / X)
+    R = -hermitianpart(A / X)
+    Q = X
+    return J, R, Q
 end

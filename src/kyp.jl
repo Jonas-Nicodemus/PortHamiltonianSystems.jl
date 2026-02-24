@@ -28,10 +28,21 @@ end
 """
     Xmin = kypmax(Σ; kwargs...)
 
-# Returns the maximal solution to the KYP inequality by solving the ARE equation for the anti-stabilizing solution.
+Returns the maximal solution to the KYP inequality by solving the ARE equation for the anti-stabilizing solution.
 """
 function kypmax(Σ; kwargs...)
     return prgram(Σ, :o; min=false, kwargs...)
+end
+
+"""
+    Δ = kypgap(Σ; kwargs...)
+
+Returns the gap between the minimal and maximal solution of the KYP inequality.
+"""
+function kypgap(Σ; kwargs...)
+    Xmin = kypmin(Σ; kwargs...)
+    Xmax = kypmax(Σ; kwargs...)
+    return Xmax - Xmin
 end
 
 function kypare(Σ::PortHamiltonianStateSpace, X)
