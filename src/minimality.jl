@@ -18,5 +18,5 @@ function phminreal(Σph::PortHamiltonianStateSpace; trunc_tol=1e-12)
     
     Wr = Ly * V * Diagonal(σ .^ (-1//2))
 
-    return phss(Wr' * Σph.J * Wr, Wr' * Σph.R * Wr, Diagonal(inv.(σ)), Wr' * Σph.G, Wr' * Σph.P, Σph.S, Σph.N)
+    return phss(skewhermitian(Wr' * Σph.J * Wr), hermitianpart(Wr' * Σph.R * Wr), Diagonal(inv.(σ)), Wr' * Σph.G, Wr' * Σph.P, Σph.S, Σph.N)
 end
