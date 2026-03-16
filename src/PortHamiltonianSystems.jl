@@ -2,7 +2,7 @@ module PortHamiltonianSystems
 
 using LinearAlgebra, SkewLinearAlgebra, VectorizationTransformations
 using ControlSystemsBase, MatrixEquations
-using JuMP, Hypatia
+using JuMP, Clarabel
 
 export PortHamiltonianStateSpace, phss # types/PortHamiltonianStateSpace.jl
 export ispassive, sampopov # analysis.jl

@@ -1,11 +1,11 @@
 name = "PortHamiltonianSystems"
 uuid = "6ff9205f-2186-4c35-b9d7-b7843b877754"
-authors = ["Jonas Nicodemus <jonas.nicodemus@icloud.com> and contributors"]
 version = "1.1.0"
+authors = ["Jonas Nicodemus <jonas.nicodemus@icloud.com> and contributors"]
 
 [deps]
+Clarabel = "61c947e1-3e6d-4ee4-985a-eec8c727bd6e"
 ControlSystemsBase = "aaaaaaaa-a6ca-5380-bf3e-84a91bcd477e"
-Hypatia = "b99e6be6-89ff-11e8-14f8-45c827f4f8f2"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MatrixEquations = "99c1a7ee-ab34-5fd5-8076-27c950a045f4"
@@ -15,6 +15,7 @@ VectorizationTransformations = "80703ced-6a7a-43a7-9240-bd692d5c00f6"
 
 [compat]
 Aqua = "0.8"
+Clarabel = "0.11"
 ControlSystemsBase = "1"
 Hypatia = "0.9"
 JuMP = "1"
@@ -27,7 +28,8 @@ julia = "1.12"
 
 [extras]
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+Hypatia = "b99e6be6-89ff-11e8-14f8-45c827f4f8f2"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Aqua", "Test"]
+test = ["Aqua", "Hypatia", "Test"]

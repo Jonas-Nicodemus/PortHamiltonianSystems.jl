@@ -3,8 +3,8 @@
 
 Tries to solve the KYP inequality via semi definite programming.
 """
-function kyp(Σ::StateSpace; kwargs...)
-    model = Model(() -> Hypatia.Optimizer(verbose = false))
+function kyp(Σ::StateSpace; optimizer=Clarabel.Optimizer, kwargs...)
+    model = Model(optimizer)
     for kwarg in keys(kwargs)
         set_optimizer_attribute(model, String(kwarg), kwargs[kwarg])
     end

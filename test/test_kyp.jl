@@ -1,10 +1,9 @@
-module Test_kyp
-
 using Test
 
 using PortHamiltonianSystems
 
 using LinearAlgebra, ControlSystemsBase
+using Hypatia
 
 @testset "test_kyp.jl" begin
     J = [0. 1.; -1. 0.]
@@ -36,7 +35,9 @@ using LinearAlgebra, ControlSystemsBase
 
         @test ispsd(X) 
         @test ispsd(kypmat(Σ, X))
-    end
-end
 
+        X = kyp(Σ; optimizer=Hypatia.Optimizer)
+        @test ispsd(X)
+        @test ispsd(kypmat(Σ, X))
+    end
 end
