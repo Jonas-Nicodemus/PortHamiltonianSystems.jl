@@ -1,7 +1,10 @@
 """
-    X = kyp(Σ; kwargs...)
+    X = kyp(Σ; optimizer=Clarabel.Optimizer, kwargs...)
 
 Tries to solve the KYP inequality via semi definite programming.
+The optimizer can be specified via the `optimizer` keyword, and additional keyword arguments are passed to the optimizer.
+See [JuMP supported solvers](https://jump.dev/JuMP.jl/stable/installation/#Supported-solvers) for a list of available solvers.
+Note that the solver needs to support SDPs, e.g. Clarabel, Hypatia, etc.
 """
 function kyp(Σ::StateSpace; optimizer=Clarabel.Optimizer, kwargs...)
     model = Model(optimizer)
